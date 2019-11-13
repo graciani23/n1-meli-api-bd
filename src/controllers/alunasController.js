@@ -5,22 +5,20 @@ const Alunas = require('../model/alunas');
 const fs = require('fs');
 
 exports.get = (req, res) => {
-  // console.log(req.url)
-  // res.status(200).send(alunas)
-
   Alunas.find(function (err, alunas) {
     if (err) res.status(500).send(err);
     res.status(200).send(alunas);
   })
 }
 
+
 exports.getById = (req, res) => {
-  const id = req.params.id
-  if (id > 34 || id <= 0) {
-    res.redirect(301, "https://en.wikipedia.org/wiki/Man-in-the-middle_attack")
-  }
-  res.status(200).send(alunas.find(aluna => aluna.id == id))
+  Alunas.findById({ _id: req.params.id }, (function(err, aluna) {
+    if (err) res.status(500).send(err)
+    res.status(200).send(aluna)
+  }))
 }
+
 
 exports.getBooks = (req, res) => {
   const id = req.params.id
@@ -34,12 +32,6 @@ exports.getBooks = (req, res) => {
   res.send(tituloLivros)
 }
 
-// Alunas.find(function (err, alunas) {
-//   if (err) res.status(500).send(err);
-//   res.status(200).send(alunas);
-// })
-// }
-
 // exports.getSp = (req, res) => {
 //   const nasceuSp = alunas.filter(aluna => {
 //     console.log(aluna)
@@ -50,15 +42,13 @@ exports.getBooks = (req, res) => {
 //   res.status(200).send(meninasSp)
 // }
 
-
-
-  exports.getSp = (req, res) => {
-    Alunas.find({ "nasceuEmSp": "true"}, (function (err, alunas) {
-      if (err) res.status(500).send(err);
-      const meninasSp = alunas.map(aluna => aluna.nome)
-      res.status(200).send(meninasSp)
-    }))
-  }
+exports.getSp = (req, res) => {
+  Alunas.find({ "nasceuEmSp": "true" }, (function (err, alunas) {
+    if (err) res.status(500).send(err);
+    const meninasSp = alunas.map(aluna => aluna.nome)
+    res.status(200).send(meninasSp)
+  }))
+}
 
 
 
